@@ -89,8 +89,6 @@ In the example below, we launch the turtlesim node and half a second later our t
 In more complex integration test setups, you will probably want
 to launch a system of several nodes, together with additional nodes
 that perform mocking or must otherwise interact with the nodes under test.
-Including existing (XML) launch files - to avoid launch file duplication -
-is supported.
 
 .. code-block:: python
 
@@ -199,10 +197,12 @@ A typical test here is whether the nodes exited cleanly, for which ``launch_test
 2 Register the test in the CMakeLists.txt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Registering the test in the ``CMakeLists.txt`` fulfills two functions:
-it integrates it in the ``CTest`` framework ROS 2 CMake-based packages rely on
-(and hence it will be called when running ``colcon test``),
-and it also allows to specify *how* the test is to be run -
-in this case, with a unique domain id to ensure test isolation.
+
+- it integrates it in the ``CTest`` framework ROS 2 CMake-based packages rely on
+  (and hence it will be called when running ``colcon test``).
+- it allows to specify *how* the test is to be run -
+  in this case, with a unique domain id to ensure test isolation.
+
 This latter aspect is realized using the special test runner
 `run_test_isolated.py <https://github.com/ros2/ament_cmake_ros/blob/{REPOS_FILE_BRANCH}/ament_cmake_ros/cmake/run_test_isolated.py>`_.
 To ease adding several integration tests, we define the CMake function ``add_ros_isolated_launch_test`` such that each additional test requires only a single line.
