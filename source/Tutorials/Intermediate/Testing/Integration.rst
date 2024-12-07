@@ -173,29 +173,17 @@ It's highly recommended to go through
               'Spawning turtle [turtle1] at x=',
               timeout=5, stream='stderr')
 
-Note that the way we listen to the 'turtle1/pose' topic
-in ``test_publishes_pose`` differs from
-:doc:`the usual approach <../../Beginner-Client-Libraries/Writing-A-Simple-Py-Publisher-And-Subscriber>`.
-Instead of calling the blocking ``rclpy.spin``,
-we trigger the ``spin_once`` method -
-which executes the first open callback
-(so, our subscriber callback if a message arrived within 1 s) -
-until we have gathered all messages published over the last 10 s.
+Note that the way we listen to the 'turtle1/pose' topic in ``test_publishes_pose`` differs from :doc:`the usual approach <../../Beginner-Client-Libraries/Writing-A-Simple-Py-Publisher-And-Subscriber>`.
+Instead of calling the blocking ``rclpy.spin``, we trigger the ``spin_once`` method - which executes the first available callback (our subscriber callback if a message arrived within 1 second) - until we have gathered all messages published over the last 10 seconds.
 
-If you want to go further, you can implement yourself a third test
-that publishes a twist message, asking the turtle to move,
-and subsequently checks that it moved
-by asserting that the pose message changed,
-effectively automating part of the
-`Turtlesim introduction tutorial <../../Beginner-CLI-Tools/Introducing-Turtlesim/Introducing-Turtlesim>`.
+If you want to go further, you can implement a third test that publishes a twist message, asking the turtle to move, and subsequently checks that it moved by asserting that the pose message changed,
+effectively automating part of the `Turtlesim introduction tutorial <../../Beginner-CLI-Tools/Introducing-Turtlesim/Introducing-Turtlesim>`.
 
 
 1.4 Post-shutdown tests
 ~~~~~~~~~~~~~~~~~~~~~~~
-The classes marked with the ``launch_testing.post_shutdown_test`` decorator
-are run after letting the nodes under test exit.
-A typical test here is whether the nodes exited cleanly,
-for which ``launch_testing`` provides the method
+The classes marked with the ``launch_testing.post_shutdown_test`` decorator are run after letting the nodes under test exit.
+A typical test here is whether the nodes exited cleanly, for which ``launch_testing`` provides the method
 `asserts.assertExitCodes <https://docs.ros.org/en/{DISTRO}/p/launch_testing/launch_testing.asserts.html#launch_testing.asserts.assertExitCodes>`_.
 
 .. code-block:: python
@@ -217,9 +205,7 @@ and it also allows to specify *how* the test is to be run -
 in this case, with a unique domain id to ensure test isolation.
 This latter aspect is realized using the special test runner
 `run_test_isolated.py <https://github.com/ros2/ament_cmake_ros/blob/{REPOS_FILE_BRANCH}/ament_cmake_ros/cmake/run_test_isolated.py>`_.
-To ease adding several integration tests,
-we define the CMake function ``add_ros_isolated_launch_test``
-such that each additional test requires only a single line.
+To ease adding several integration tests, we define the CMake function ``add_ros_isolated_launch_test`` such that each additional test requires only a single line.
 
 .. code-block:: cmake
 
@@ -244,8 +230,7 @@ such that each additional test requires only a single line.
 
 3 Dependencies and package organization
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Finally, to avoid surprises,
-add the following dependencies to your ``package.xml``:
+Finally, add the following dependencies to your ``package.xml``:
 
 .. code-block:: XML
 
@@ -258,8 +243,7 @@ add the following dependencies to your ``package.xml``:
   <test_depend>turtlesim</test_depend>
 
 
-After following the above steps, your package (here named 'app')
-ought to look as follows:
+After following the above steps, your package (here named 'app') ought to look as follows:
 
 .. code-block::
 
@@ -269,24 +253,18 @@ ought to look as follows:
     tests/
         test_integration.py
 
-Concerning package organization:
 Integration tests can be part of any ROS package.
-One can dedicate one or more packages to just integration testing,
-or alternatively add them to the package of which they test the functionality.
-In this tutorial, we go with the first option
-as we will test the existing Turtlesim node.
+One can dedicate one or more packages to just integration testing, or alternatively add them to the package of which they test the functionality.
+In this tutorial, we go with the first option as we will test the existing Turtlesim node.
 
 
 4 Running tests and report generation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 4.1 Running with colcon
 ~~~~~~~~~~~~~~~~~~~~~~~
-Running all tests is straightforward: simply run
-:doc:`colcon test <../../Intermediate/Testing/CLI>`.
-This command suppresses the test output
-and exposes little about which tests succeed and which fail.
-Useful therefore while developing tests is the option
-to print all test output while the tests are running:
+Running all tests is straightforward: simply run :doc:`colcon test <../../Intermediate/Testing/CLI>`.
+This command suppresses the test output and exposes little about which tests succeed and which fail.
+Therefore while developing tests the ``--event-handlers`` option is useful to print all test output while the tests are running:
 
 .. code-block:: console
 
@@ -305,13 +283,11 @@ For viewing the results, there's a separate colcon verb. For example,
 
   Summary: 4 tests, 0 errors, 2 failures, 0 skipped
 
-lists two files:
-one ctest-formatted XML file (a result of the ``CMakeLists.txt``) and,
-more interestingly, also an XUnit-formatted XML file.
-This latter is suitable for automatic report generation
-in automated testing in CI/CD pipelines.
-If we would have also added unit tests, their XUnit files
-would show up as well here.
+This command lists two files:
+* a ctest-formatted XML file (a result of the ``CMakeLists.txt``)
+* an XUnit-formatted XML file, which is suitable for automatic report generation in automated testing in CI/CD pipelines.
+
+If we would have also added unit tests, their XUnit files would show up as well here.
 
 A suitable tool to visualize them all together is the
 `NodeJS package Xunit Viewer <https://github.com/lukejpreston/xunit-viewer>`_.
