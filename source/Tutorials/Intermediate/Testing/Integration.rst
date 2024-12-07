@@ -116,7 +116,7 @@ is supported.
 1.3 Active tests
 ~~~~~~~~~~~~~~~~
 The active tests interact with the running nodes.
-In this tutorial, we will check whether the Turtlesim node publishes pose messages (by listening to the node's 'turtle1/pose' topic)
+In this tutorial, we will check whether the turtlesim node publishes pose messages (by listening to the node's 'turtle1/pose' topic)
 and whether it logs that it spawned the turtle (by listening to stderr).
 
 The active tests are defined as methods of a class inheriting
@@ -255,7 +255,7 @@ After following the above steps, your package (here named 'app') ought to look a
 
 Integration tests can be part of any ROS package.
 One can dedicate one or more packages to just integration testing, or alternatively add them to the package of which they test the functionality.
-In this tutorial, we go with the first option as we will test the existing Turtlesim node.
+In this tutorial, we go with the first option as we will test the existing turtlesim node.
 
 
 4 Running tests and report generation
@@ -314,7 +314,7 @@ For example, command and response (without highlighting):
 Summary
 -------
 
-In this tutorial, we explored the process of creating and running integration tests on the ROS 2 Turtlesim node. 
+In this tutorial, we explored the process of creating and running integration tests on the ROS 2 turtlesim node. 
 We discussed the integration test launch file and covered writing active tests and post-shutdown tests.
 To recap, the four key elements of the integration test launch file are:
 
