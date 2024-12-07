@@ -44,9 +44,7 @@ and post-shutdown tests (which run once after all nodes have exited).
 ``launch_testing`` relies on the Python standard module
 `unittest <https://docs.python.org/3/library/unittest.html>`_
 for the actual testing.
-
 To get our integration tests run as part of ``colcon test``, we register the launch file in the ``CMakeLists.txt``.
-To finish, we will briefly touch on how to run these tests and inspect the test results.
 
 
 Steps
@@ -260,55 +258,7 @@ In this tutorial, we go with the first option as we will test the existing turtl
 
 4 Running tests and report generation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-4.1 Running with colcon
-~~~~~~~~~~~~~~~~~~~~~~~
-Running all tests is straightforward: simply run :doc:`colcon test <../../Intermediate/Testing/CLI>`.
-This command suppresses the test output and exposes little about which tests succeed and which fail.
-Therefore while developing tests the ``--event-handlers`` option is useful to print all test output while the tests are running:
-
-.. code-block:: console
-
-  colcon test --event-handlers console_direct+
-
-
-4.2 Visualizing test results
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-For viewing the results, there's a separate colcon verb. For example,
-
-.. code-block:: console
-
-  $ colcon test-result --all
-  build/app/Testing/20241013-0810/Test.xml: 1 tests, 0 errors, 1 failure, 0 skipped
-  build/app/test_results/app/test_test_integration.py.xunit.xml: 3 tests, 0 errors, 1 failure, 0 skipped
-
-  Summary: 4 tests, 0 errors, 2 failures, 0 skipped
-
-This command lists two files:
-* a ctest-formatted XML file (a result of the ``CMakeLists.txt``)
-* an XUnit-formatted XML file, which is suitable for automatic report generation in automated testing in CI/CD pipelines.
-
-If we would have also added unit tests, their XUnit files would show up as well here.
-
-A suitable tool to visualize them all together is the
-`NodeJS package Xunit Viewer <https://github.com/lukejpreston/xunit-viewer>`_.
-It converts the XUnit files to HTML or straight into the terminal.
-For example, command and response (without highlighting):
-
-.. code-block:: console
-
-  $ xunit-viewer -r build/app/test_results -c
-    app.test_integration.launch_tests
-        ✗ test_publishes_pose time=0.52
-          - Traceback (most recent call last):
-    File "/home/user/ros_workspace/src/app/test/test_integration.py", line 67, in test_publishes_pose
-        assert len(msgs_rx) > 100
-            ^^^^^^^^^^^^^^^^^^
-    AssertionError
-        ✓ test_exit_codes time=0.0
-        ✓ test_logs_spawning time=0.197
-
-  1 failure, 2 passed
-  Written to: /home/user/ros_workspace/index.html
+For running the integration test and examining the results, see the tutorial :doc:`Running Tests in ROS 2 from the Command Line<../../Intermediate/Testing/CLI>`.
 
 
 Summary
