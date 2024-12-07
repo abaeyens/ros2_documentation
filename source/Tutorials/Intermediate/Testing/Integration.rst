@@ -314,38 +314,18 @@ For example, command and response (without highlighting):
 Summary
 -------
 
-In this tutorial, we explored the process of creating and running
-integration tests on the ROS 2 Turtlesim node. 
-We discussed the integration test launch file
-and covered writing active tests and post-shutdown tests.
+In this tutorial, we explored the process of creating and running integration tests on the ROS 2 Turtlesim node. 
+We discussed the integration test launch file and covered writing active tests and post-shutdown tests.
 To recap, the four key elements of the integration test launch file are:
 
-* The function ``generate_test_description``:
-  same as the classic way of launching nodes
-  (basically, it replaces ``generate_launch_description``).
-  It launches our nodes under tests as well as our tests.
-* ``launch_testing.actions.ReadyToTest()``:
-  alerts the test framework that the tests should be run.
-  This ensures that the active tests and the nodes are run synchronously.
-* An undecorated class inheriting from ``unittest.TestCase``:
-  houses the active tests, including set up and teardown.
-  One has access to the ROS logging through ``proc_output``.
-* A second class inheriting from ``unittest.TestCase``,
-  decorated with ``@launch_testing.post_shutdown_test()``.
-  As the name implies, these tests run after all nodes have shutdown.
-  A common assert here is to check the exit codes,
-  to ensure all nodes exited cleanly.
+* The function ``generate_test_description``: This launches our nodes under tests as well as our tests.
+* ``launch_testing.actions.ReadyToTest()``: This alerts the test framework that the tests should be run, and ensures that the active tests and the nodes are run together.
+* An undecorated class inheriting from ``unittest.TestCase``: This houses the active tests, including set up and teardown, and gives access to ROS logging through ``proc_output``.
+* A second class inheriting from ``unittest.TestCase`` decorated with ``@launch_testing.post_shutdown_test()``: These are tests that run after all nodes have shutdown; it is common to assert that the nodes exited cleanly.
 
-The launch test is subsequently registered in the ``CMakeLists.txt``
-using the custom cmake macro ``add_ros_isolated_launch_test``
-that ensures that each launch test runs with a unique ``ROS_DOMAIN_ID``,
+The launch test is subsequently registered in the ``CMakeLists.txt`` using the custom cmake macro ``add_ros_isolated_launch_test`` which ensures that each launch test runs with a unique ``ROS_DOMAIN_ID``,
 avoiding undesired cross communication.
 
-To finish, tools such as Xunit Viewer ease visualizing the test results
-in a more colorful way than the colcon utilities.
-We hope this tutorial gave the reader a good grasp
-of how to conduct integration tests in ROS 2,
-delineating tests, and analyzing their results.
 
 
 Next steps
@@ -354,8 +334,8 @@ Next steps
   whether the turtle is responsive to twist commands,
   and another that verifies whether the spawn service
   sets the turtle to the intended pose
-  (see the `Turtlesim introduction tutorial <../../Beginner-CLI-Tools/Introducing-Turtlesim/Introducing-Turtlesim>`).
-* Instead of Turtlesim, launch the
+  (see the `turtlesim introduction tutorial <../../Beginner-CLI-Tools/Introducing-Turtlesim/Introducing-Turtlesim>`).
+* Instead of turtlesim, launch the
   :doc:`Gazebo simulator <../../Advanced/Simulators/Gazebo/Gazebo>`
   and simulate *your* robot in there, automating tests
   that would otherwise depend on manually operating your physical robot.
