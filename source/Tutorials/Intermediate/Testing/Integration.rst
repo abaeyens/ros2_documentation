@@ -54,22 +54,17 @@ Steps
 
 1 Describe the test in the test launch file
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Both the nodes under test and the tests themselves are launched
-using a Python launch file, which resembles a classic ROS 2 Python launch file.
-It is custom to let the integration test launch file names
-follow the pattern ``test/test_*.py``.
+Both the nodes under test and the tests themselves are launched using a Python launch file, which resembles a ROS 2 Python launch file.
+It is customary to make the integration test launch file names follow the pattern ``test/test_*.py``.
 
-There are two common types of tests in integration testing:
-active tests, which run while the nodes under test are running,
-and post-shutdown tests, which are run after exiting the nodes.
+There are two common types of tests in integration testing: active tests, which run while the nodes under test are running, and post-shutdown tests, which are run after exiting the nodes.
 We will cover both in this tutorial.
 
 
 1.1 Imports
 ~~~~~~~~~~~
-The top imports the Python modules we will be using.
-Only two modules are specific to testing:
-the general-purpose ``unittest``, and ``launch_testing``.
+We first start by importing the Python modules we will be using.
+Only two modules are specific to testing: the general-purpose ``unittest``, and ``launch_testing``.
 
 .. code-block:: python
 
@@ -87,15 +82,13 @@ the general-purpose ``unittest``, and ``launch_testing``.
 
 1.2 Generate the test description
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-The function ``generate_test_description`` describes what to launch,
-similar to ``generate_launch_description``
-in a classic ROS 2 Python launch file.
-In the example below, we launch the turtlesim node
-and half a second later our tests.
+The function ``generate_test_description`` describes what to launch, similar to ``generate_launch_description``
+in a ROS 2 Python launch file.
+In the example below, we launch the turtlesim node and half a second later our tests.
 
 In more complex integration test setups, you will probably want
 to launch a system of several nodes, together with additional nodes
-that performing mocking or must otherwise interact with the nodes under test.
+that perform mocking or must otherwise interact with the nodes under test.
 Including existing (XML) launch files - to avoid launch file duplication -
 is supported.
 
@@ -122,30 +115,19 @@ is supported.
 
 1.3 Active tests
 ~~~~~~~~~~~~~~~~
-The active tests interact with the running nodes. In this tutorial,
-we will check whether the Turtlesim node publishes pose messages
-(by listening to the node's 'turtle1/pose' topic)
-and whether it logs that it spawned the turtle
-(by listening to stderr).
+The active tests interact with the running nodes.
+In this tutorial, we will check whether the Turtlesim node publishes pose messages (by listening to the node's 'turtle1/pose' topic)
+and whether it logs that it spawned the turtle (by listening to stderr).
 
 The active tests are defined as methods of a class inheriting
 from `unittest.TestCase <https://docs.python.org/3/library/unittest.html#unittest.TestCase>`_.
 The child class, here ``TestTurtleSim``, contains the following methods:
 
-- ``test_*``:
-  the test methods, each performing some ROS communication
-  with the nodes under test and/or listening to the process output
-  (passed in through ``proc_output``).
+- ``test_*``: the test methods, each performing some ROS communication with the nodes under test and/or listening to the process output (passed in through ``proc_output``).
   They are executed sequentially.
-- ``setUp``, ``tearDown``:
-  respectively run before (to prepare the test fixture)
-  and after executing each test method.
-  By creating the node in the ``setUp`` method,
-  we use a different node instance for each test
-  to reduce the risk of tests contaminating each other.
-- ``setUpClass``, ``tearDownClass``:
-  these class methods respectively run once before and after
-  executing all the test methods.
+- ``setUp``, ``tearDown``: respectively run before (to prepare the test fixture) and after executing each test method.
+  By creating the node in the ``setUp`` method, we use a different node instance for each test to reduce the risk of tests communicating with each other.
+- ``setUpClass``, ``tearDownClass``: these class methods respectively run once before and after executing all the test methods.
 
 It's highly recommended to go through
 `launch_testing's detailed documentation on this topic <https://docs.ros.org/en/{DISTRO}/p/launch_testing/index.html>`_.
