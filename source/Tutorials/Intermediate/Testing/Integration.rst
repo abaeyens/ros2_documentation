@@ -1,9 +1,7 @@
-.. TestingIntegration:
-
 Writing Basic Integration Tests with launch_testing
 ===================================================
 
-**Goal:** Create and run integration tests on the ROS 2 Turtlesim node.
+**Goal:** Create and run integration tests on the ROS 2 turtlesim node.
 
 **Tutorial level:** Intermediate
 
@@ -16,8 +14,7 @@ Writing Basic Integration Tests with launch_testing
 
 Prerequisites
 -------------
-Before starting this tutorial,
-it is recommended to have completed the following tutorials on launching nodes:
+Before starting this tutorial, it is recommended to have completed the following tutorials on launching nodes:
 
 * :doc:`Launching Multiple Nodes <../../Beginner-CLI-Tools/Launching-Multiple-Nodes/Launching-Multiple-Nodes>`
 * :doc:`Creating Launch files <../../Intermediate/Launch/Creating-Launch-Files>`
@@ -25,16 +22,13 @@ it is recommended to have completed the following tutorials on launching nodes:
 
 Background
 ----------
-Where unit tests focus on validating a very specific piece of functionality,
-integration tests go all the way in the other direction.
-In ROS 2 this means launching a system of one or several nodes,
-for example the Gazebo simulator and the Nav2 navigation stack.
+Where unit tests focus on validating a very specific piece of functionality, integration tests focus on validating the interaction between pieces of code.
+In ROS 2 this is often accomplished by launching a system of one or several nodes, for example the `Gazebo simulator <https://gazebosim.org/home>`__ and the `Nav2 navigation <https://github.com/ros-planning/navigation2.git>`__ stack.
 As a result, these tests are more complex both to set up and to run.
 
-A key aspect of ROS 2 integration testing is that nodes part of different tests
-shouldn't communicate with each other, even when run in parallel,
-which will be achieved here using a specific test runner
-that picks unique ROS domain id's.
+A key aspect of ROS 2 integration testing is that nodes that are part of different tests
+shouldn't communicate with each other, even when run in parallel.
+This will be achieved here using a specific test runner that picks unique :doc:`ROS domain IDs <../../../Concepts/Intermediate/About-Domain-ID>`.
 In addition, integration tests have to fit in the overall testing workflow.
 A standardized approach is to ensure each test outputs an XUnit file,
 which are easily parsed using common test tooling.
@@ -42,27 +36,17 @@ which are easily parsed using common test tooling.
 
 Overview
 --------
-The main tool in use here is the
-`launch_testing <https://docs.ros.org/en/{DISTRO}/p/launch_testing/index.html>`_
-package
+The main tool in use here is the `launch_testing <https://docs.ros.org/en/{DISTRO}/p/launch_testing/index.html>`_ package
 (`launch_testing repository <https://github.com/ros2/launch/tree/{REPOS_FILE_BRANCH}/launch_testing>`_).
-This ROS-agnostic functionality allows to extend a classic Python launch file
+This ROS-agnostic functionality can extend a Python launch file
 with both active tests (that run while the nodes are also running)
 and post-shutdown tests (which run once after all nodes have exited).
 ``launch_testing`` relies on the Python standard module
 `unittest <https://docs.python.org/3/library/unittest.html>`_
 for the actual testing.
-Hence, preferably avoid mixing with ``pytest``.
-If you prefer using pytest for integration tests,
-you will want to use the package
-`launch_pytest <https://docs.ros.org/en/{DISTRO}/p/launch_pytest/index.html>`_
-(`launch_pytest repository <https://github.com/ros2/launch/tree/{REPOS_FILE_BRANCH}/launch_pytest>`_),
-though this tutorial will discuss using unittest.
 
-To get our integration tests run as part of ``colcon test``,
-we register the launch file in the ``CMakeLists.txt``.
-To finish, we will briefly touch
-on how to run these tests and inspect the test results.
+To get our integration tests run as part of ``colcon test``, we register the launch file in the ``CMakeLists.txt``.
+To finish, we will briefly touch on how to run these tests and inspect the test results.
 
 
 Steps
