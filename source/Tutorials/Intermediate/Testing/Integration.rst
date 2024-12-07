@@ -277,7 +277,7 @@ For viewing the results, there's a separate colcon verb. For example,
 
 .. code-block:: console
 
-  $ colcon test-result --all          
+  $ colcon test-result --all
   build/app/Testing/20241013-0810/Test.xml: 1 tests, 0 errors, 1 failure, 0 skipped
   build/app/test_results/app/test_test_integration.py.xunit.xml: 3 tests, 0 errors, 1 failure, 0 skipped
 
@@ -314,7 +314,7 @@ For example, command and response (without highlighting):
 Summary
 -------
 
-In this tutorial, we explored the process of creating and running integration tests on the ROS 2 turtlesim node. 
+In this tutorial, we explored the process of creating and running integration tests on the ROS 2 turtlesim node.
 We discussed the integration test launch file and covered writing active tests and post-shutdown tests.
 To recap, the four key elements of the integration test launch file are:
 
@@ -325,23 +325,6 @@ To recap, the four key elements of the integration test launch file are:
 
 The launch test is subsequently registered in the ``CMakeLists.txt`` using the custom cmake macro ``add_ros_isolated_launch_test`` which ensures that each launch test runs with a unique ``ROS_DOMAIN_ID``,
 avoiding undesired cross communication.
-
-
-
-Next steps
-----------
-* Extend the two basic active tests with one that checks
-  whether the turtle is responsive to twist commands,
-  and another that verifies whether the spawn service
-  sets the turtle to the intended pose
-  (see the `turtlesim introduction tutorial <../../Beginner-CLI-Tools/Introducing-Turtlesim/Introducing-Turtlesim>`).
-* Instead of turtlesim, launch the
-  :doc:`Gazebo simulator <../../Advanced/Simulators/Gazebo/Gazebo>`
-  and simulate *your* robot in there, automating tests
-  that would otherwise depend on manually operating your physical robot.
-* Go through the
-  `launch_testing documentation <https://docs.ros.org/en/{DISTRO}/p/launch_testing/index.html>`_
-  and explore the many possibilities for integration testing it offers.
 
 
 Related content
