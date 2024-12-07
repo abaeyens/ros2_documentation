@@ -11,17 +11,17 @@ Writing Basic Integration Tests with launch_testing
    :depth: 2
    :local:
 
-
 Prerequisites
 -------------
+
 Before starting this tutorial, it is recommended to have completed the following tutorials on launching nodes:
 
 * :doc:`Launching Multiple Nodes <../../Beginner-CLI-Tools/Launching-Multiple-Nodes/Launching-Multiple-Nodes>`
 * :doc:`Creating Launch files <../../Intermediate/Launch/Creating-Launch-Files>`
 
-
 Background
 ----------
+
 Where unit tests focus on validating a very specific piece of functionality, integration tests focus on validating the interaction between pieces of code.
 In ROS 2 this is often accomplished by launching a system of one or several nodes, for example the `Gazebo simulator <https://gazebosim.org/home>`__ and the `Nav2 navigation <https://github.com/ros-planning/navigation2.git>`__ stack.
 As a result, these tests are more complex both to set up and to run.
@@ -33,9 +33,9 @@ In addition, integration tests have to fit in the overall testing workflow.
 A standardized approach is to ensure each test outputs an XUnit file,
 which are easily parsed using common test tooling.
 
-
 Overview
 --------
+
 The main tool in use here is the `launch_testing <https://docs.ros.org/en/{DISTRO}/p/launch_testing/index.html>`_ package
 (`launch_testing repository <https://github.com/ros2/launch/tree/{REPOS_FILE_BRANCH}/launch_testing>`_).
 This ROS-agnostic functionality can extend a Python launch file
@@ -46,21 +46,21 @@ and post-shutdown tests (which run once after all nodes have exited).
 for the actual testing.
 To get our integration tests run as part of ``colcon test``, we register the launch file in the ``CMakeLists.txt``.
 
-
 Steps
 -----
 
 1 Describe the test in the test launch file
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 Both the nodes under test and the tests themselves are launched using a Python launch file, which resembles a ROS 2 Python launch file.
 It is customary to make the integration test launch file names follow the pattern ``test/test_*.py``.
 
 There are two common types of tests in integration testing: active tests, which run while the nodes under test are running, and post-shutdown tests, which are run after exiting the nodes.
 We will cover both in this tutorial.
 
-
 1.1 Imports
 ~~~~~~~~~~~
+
 We first start by importing the Python modules we will be using.
 Only two modules are specific to testing: the general-purpose ``unittest``, and ``launch_testing``.
 
@@ -77,9 +77,9 @@ Only two modules are specific to testing: the general-purpose ``unittest``, and 
   import rclpy
   from turtlesim.msg import Pose
 
-
 1.2 Generate the test description
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 The function ``generate_test_description`` describes what to launch, similar to ``generate_launch_description``
 in a ROS 2 Python launch file.
 In the example below, we launch the turtlesim node and half a second later our tests.
@@ -108,9 +108,9 @@ that perform mocking or must otherwise interact with the nodes under test.
           ), {},
       )
 
-
 1.3 Active tests
 ~~~~~~~~~~~~~~~~
+
 The active tests interact with the running nodes.
 In this tutorial, we will check whether the turtlesim node publishes pose messages (by listening to the node's 'turtle1/pose' topic)
 and whether it logs that it spawned the turtle (by listening to stderr).
@@ -175,9 +175,9 @@ Instead of calling the blocking ``rclpy.spin``, we trigger the ``spin_once`` met
 If you want to go further, you can implement a third test that publishes a twist message, asking the turtle to move, and subsequently checks that it moved by asserting that the pose message changed,
 effectively automating part of the `Turtlesim introduction tutorial <../../Beginner-CLI-Tools/Introducing-Turtlesim/Introducing-Turtlesim>`.
 
-
 1.4 Post-shutdown tests
 ~~~~~~~~~~~~~~~~~~~~~~~
+
 The classes marked with the ``launch_testing.post_shutdown_test`` decorator are run after letting the nodes under test exit.
 A typical test here is whether the nodes exited cleanly, for which ``launch_testing`` provides the method
 `asserts.assertExitCodes <https://docs.ros.org/en/{DISTRO}/p/launch_testing/launch_testing.asserts.html#launch_testing.asserts.assertExitCodes>`_.
@@ -191,9 +191,9 @@ A typical test here is whether the nodes exited cleanly, for which ``launch_test
           """Check if the processes exited normally."""
           launch_testing.asserts.assertExitCodes(proc_info)
 
-
 2 Register the test in the CMakeLists.txt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 Registering the test in the ``CMakeLists.txt`` fulfills two functions:
 
 - it integrates it in the ``CTest`` framework ROS 2 CMake-based packages rely on
@@ -225,9 +225,9 @@ To ease adding several integration tests, we define the CMake function ``add_ros
     add_ros_isolated_launch_test(test/test_integration.py)
   endif()
 
-
 3 Dependencies and package organization
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 Finally, add the following dependencies to your ``package.xml``:
 
 .. code-block:: XML
@@ -239,7 +239,6 @@ Finally, add the following dependencies to your ``package.xml``:
   <test_depend>launch_testing_ament_cmake</test_depend>
   <test_depend>rclpy</test_depend>
   <test_depend>turtlesim</test_depend>
-
 
 After following the above steps, your package (here named 'app') ought to look as follows:
 
@@ -255,11 +254,10 @@ Integration tests can be part of any ROS package.
 One can dedicate one or more packages to just integration testing, or alternatively add them to the package of which they test the functionality.
 In this tutorial, we go with the first option as we will test the existing turtlesim node.
 
-
 4 Running tests and report generation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-For running the integration test and examining the results, see the tutorial :doc:`Running Tests in ROS 2 from the Command Line<../../Intermediate/Testing/CLI>`.
 
+For running the integration test and examining the results, see the tutorial :doc:`Running Tests in ROS 2 from the Command Line<../../Intermediate/Testing/CLI>`.
 
 Summary
 -------
@@ -275,7 +273,6 @@ To recap, the four key elements of the integration test launch file are:
 
 The launch test is subsequently registered in the ``CMakeLists.txt`` using the custom cmake macro ``add_ros_isolated_launch_test`` which ensures that each launch test runs with a unique ``ROS_DOMAIN_ID``,
 avoiding undesired cross communication.
-
 
 Related content
 ---------------
