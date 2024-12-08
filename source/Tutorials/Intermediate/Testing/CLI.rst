@@ -55,7 +55,7 @@ For example, command and response (without highlighting):
 
 .. code-block:: console
 
-  $ xunit-viewer -r build/app/test_results -c
+  $ xunit-viewer -r build -c
     app.test_integration.launch_tests
         ✗ test_publishes_pose time=0.52
           - Traceback (most recent call last):
