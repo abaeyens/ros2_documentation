@@ -26,24 +26,18 @@ Where unit tests focus on validating a very specific piece of functionality, int
 In ROS 2 this is often accomplished by launching a system of one or several nodes, for example the `Gazebo simulator <https://gazebosim.org/home>`__ and the `Nav2 navigation <https://github.com/ros-planning/navigation2.git>`__ stack.
 As a result, these tests are more complex both to set up and to run.
 
-A key aspect of ROS 2 integration testing is that nodes that are part of different tests
-shouldn't communicate with each other, even when run in parallel.
+A key aspect of ROS 2 integration testing is that nodes that are part of different tests shouldn't communicate with each other, even when run in parallel.
 This will be achieved here using a specific test runner that picks unique :doc:`ROS domain IDs <../../../Concepts/Intermediate/About-Domain-ID>`.
 In addition, integration tests have to fit in the overall testing workflow.
-A standardized approach is to ensure each test outputs an XUnit file,
-which are easily parsed using common test tooling.
+A standardized approach is to ensure each test outputs an XUnit file, which are easily parsed using common test tooling.
 
 Overview
 --------
 
 The main tool in use here is the `launch_testing <https://docs.ros.org/en/{DISTRO}/p/launch_testing/index.html>`_ package
 (`launch_testing repository <https://github.com/ros2/launch/tree/{REPOS_FILE_BRANCH}/launch_testing>`_).
-This ROS-agnostic functionality can extend a Python launch file
-with both active tests (that run while the nodes are also running)
-and post-shutdown tests (which run once after all nodes have exited).
-``launch_testing`` relies on the Python standard module
-`unittest <https://docs.python.org/3/library/unittest.html>`_
-for the actual testing.
+This ROS-agnostic functionality can extend a Python launch file with both active tests (that run while the nodes are also running) and post-shutdown tests (which run once after all nodes have exited).
+``launch_testing`` relies on the Python standard module `unittest <https://docs.python.org/3/library/unittest.html>`_ for the actual testing.
 To get our integration tests run as part of ``colcon test``, we register the launch file in the ``CMakeLists.txt``.
 
 Steps
@@ -80,13 +74,10 @@ Only two modules are specific to testing: the general-purpose ``unittest``, and 
 1.2 Generate the test description
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The function ``generate_test_description`` describes what to launch, similar to ``generate_launch_description``
-in a ROS 2 Python launch file.
+The function ``generate_test_description`` describes what to launch, similar to ``generate_launch_description`` in a ROS 2 Python launch file.
 In the example below, we launch the turtlesim node and half a second later our tests.
 
-In more complex integration test setups, you will probably want
-to launch a system of several nodes, together with additional nodes
-that perform mocking or must otherwise interact with the nodes under test.
+In more complex integration test setups, you will probably want to launch a system of several nodes, together with additional nodes that perform mocking or must otherwise interact with the nodes under test.
 
 .. code-block:: python
 
@@ -112,11 +103,9 @@ that perform mocking or must otherwise interact with the nodes under test.
 ~~~~~~~~~~~~~~~~
 
 The active tests interact with the running nodes.
-In this tutorial, we will check whether the turtlesim node publishes pose messages (by listening to the node's 'turtle1/pose' topic)
-and whether it logs that it spawned the turtle (by listening to stderr).
+In this tutorial, we will check whether the turtlesim node publishes pose messages (by listening to the node's 'turtle1/pose' topic) and whether it logs that it spawned the turtle (by listening to stderr).
 
-The active tests are defined as methods of a class inheriting
-from `unittest.TestCase <https://docs.python.org/3/library/unittest.html#unittest.TestCase>`_.
+The active tests are defined as methods of a class inheriting from `unittest.TestCase <https://docs.python.org/3/library/unittest.html#unittest.TestCase>`_.
 The child class, here ``TestTurtleSim``, contains the following methods:
 
 - ``test_*``: the test methods, each performing some ROS communication with the nodes under test and/or listening to the process output (passed in through ``proc_output``).
@@ -125,8 +114,7 @@ The child class, here ``TestTurtleSim``, contains the following methods:
   By creating the node in the ``setUp`` method, we use a different node instance for each test to reduce the risk of tests communicating with each other.
 - ``setUpClass``, ``tearDownClass``: these class methods respectively run once before and after executing all the test methods.
 
-It's highly recommended to go through
-`launch_testing's detailed documentation on this topic <https://docs.ros.org/en/{DISTRO}/p/launch_testing/index.html>`_.
+It's highly recommended to go through `launch_testing's detailed documentation on this topic <https://docs.ros.org/en/{DISTRO}/p/launch_testing/index.html>`_.
 
 .. code-block:: python
 
@@ -203,8 +191,7 @@ Registering the test in the ``CMakeLists.txt`` fulfills two functions:
 - it allows to specify *how* the test is to be run -
   in this case, with a unique domain id to ensure test isolation.
 
-This latter aspect is realized using the special test runner
-`run_test_isolated.py <https://github.com/ros2/ament_cmake_ros/blob/{REPOS_FILE_BRANCH}/ament_cmake_ros/cmake/run_test_isolated.py>`_.
+This latter aspect is realized using the special test runner `run_test_isolated.py <https://github.com/ros2/ament_cmake_ros/blob/{REPOS_FILE_BRANCH}/ament_cmake_ros/cmake/run_test_isolated.py>`_.
 To ease adding several integration tests, we define the CMake function ``add_ros_isolated_launch_test`` such that each additional test requires only a single line.
 
 .. code-block:: cmake
