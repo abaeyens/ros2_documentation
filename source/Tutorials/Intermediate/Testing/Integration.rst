@@ -174,8 +174,8 @@ Instead of calling the blocking ``rclpy.spin``, we trigger the ``spin_once`` met
 The package `launch_testing_ros <https://docs.ros.org/en/{DISTRO}/p/launch_testing_ros/index.html>`_ provides some convenience functions to achieve similar behavior,
 such as `WaitForTopics <https://docs.ros.org/en/{DISTRO}/p/launch_testing_ros/launch_testing_ros.wait_for_topics.html>`_.
 
-If you want to go further, you can implement a third test that publishes a twist message, asking the turtle to move, and subsequently checks that it moved by asserting that the pose message changed,
-effectively automating part of the `Turtlesim introduction tutorial <../../Beginner-CLI-Tools/Introducing-Turtlesim/Introducing-Turtlesim>`.
+If you want to go further, you can implement a third test that publishes a twist message, asking the turtle to move, and subsequently checks that it moved by asserting that the pose message changed.
+This effectively automates part of the `Turtlesim introduction tutorial <../../Beginner-CLI-Tools/Introducing-Turtlesim/Introducing-Turtlesim>`.
 
 1.4 Post-shutdown tests
 ~~~~~~~~~~~~~~~~~~~~~~~
